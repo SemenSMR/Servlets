@@ -30,8 +30,12 @@ public class PostService {
     return result;
   }
 
-  public void removeById(long id) {
-    repository.removeById(id);
+  public void removeById(long id) throws NotFoundException {
+    try {
+      repository.removeById(id);
+    } catch (NotFoundException e) {
+      e.printStackTrace();
+      throw new RuntimeException("Error while removing post by id", e);
+    }
   }
 }
-

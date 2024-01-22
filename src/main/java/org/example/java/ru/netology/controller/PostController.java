@@ -34,17 +34,21 @@ public class PostController {
   }
 
   public void save(Reader body, HttpServletResponse response) throws IOException {
-    try {
-      final var data = service.save(gson.fromJson(body, Post.class));
-      sendResponse(response, data);
-    } catch (NotFoundException e) {
-      sendResponse(response, e.getMessage());
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    }
+    response.setContentType(APPLICATION_JSON);
+    final var gson = new Gson();
+    final var post = gson.fromJson(body, Post.class);
+    final var data = service.save(post);
+    response.getWriter().print(gson.toJson(data));
   }
 
-  public void removeById(long id, HttpServletResponse response) {
-    service.removeById(id);
+  public void removeById(long id, HttpServletResponse response) throws IOException {
+    try {
+      service.removeById(id);
+      response.getWriter().print("{\"message\": \"Post deleted\"}");
+    } catch (NotFoundException e) {
+      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      response.getWriter().print("{\"error\": \"" + e.getMessage() + "\"}");
+    }
   }
   private <T> void sendResponse(HttpServletResponse response, T data) throws IOException {
     response.setContentType(APPLICATION_JSON);

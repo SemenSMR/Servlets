@@ -26,7 +26,8 @@ public class PostRepository {
         posts.put(post.getId(), post);
         return post;
     }
+
     public void removeById(long id) {
-        posts.remove(id);
+       posts.remove(id);
     }
 }
