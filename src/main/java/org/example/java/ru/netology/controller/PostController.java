@@ -24,7 +24,8 @@ public class PostController {
 
   public void getById(long id, HttpServletResponse response) throws IOException {
     try {
-      final var data = service.getById(id);
+      final var data = service.getById(id)
+              .orElseThrow(() -> new NotFoundException(String.format("Запись с id=%d отсутствует", id)));
       sendResponse(response, data);
     } catch (NotFoundException e) {
       sendResponse(response, e.getMessage());
