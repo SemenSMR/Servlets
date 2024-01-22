@@ -2,54 +2,31 @@ package org.example.java.ru.netology.repository;
 
 import org.example.java.ru.netology.model.Post;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 // Stub
 public class PostRepository {
-    private final List<Post> posts = new ArrayList<>();
-    private long nextId = 1;
+    private final ConcurrentHashMap<Long, Post> posts = new ConcurrentHashMap<>();
+    private final AtomicLong nextId = new AtomicLong(1);
 
-    public List<Post> all() {
-        return new ArrayList<>(posts);
+    public Collection<Post> all() {
+        return posts.values();
     }
 
-    public Optional<Post> getById(long id) {
-        return posts.stream()
-                .filter(post -> post.getId() == id)
-                .findFirst();
+    public Post getById(long id) {
+        return posts.get(id);
     }
 
     public Post save(Post post) {
         if (post.getId() == 0) {
-            post.setId(nextId++);
-            posts.add(post);
-
-        } else {
-            int index = findIndexById(post.getId()); {
-                if (index != -1) {
-                    posts.set(index, post);
-
-                }
-            }
-        } return post;
-    }
-
-
-    public void removeById(long id) {
-        int index = findIndexById(id);
-        if (index != -1) {
-            posts.remove(index);
+            post.setId(nextId.getAndIncrement());
         }
+        posts.put(post.getId(), post);
+        return post;
     }
-
-    private int findIndexById(long id) {
-        for (int i = 0; i < posts.size(); i++) {
-            if (posts.get(i).getId() == id) {
-                return i;
-            }
-        } return -1;
+    public void removeById(long id) {
+        posts.remove(id);
     }
 }

@@ -4,7 +4,8 @@ import org.example.java.ru.netology.exception.NotFoundException;
 import org.example.java.ru.netology.model.Post;
 import org.example.java.ru.netology.repository.PostRepository;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Optional;
 
 public class PostService {
   private final PostRepository repository;
@@ -13,13 +14,12 @@ public class PostService {
     this.repository = repository;
   }
 
-  public List<Post> all() {
+  public Collection<Post> all() {
     return repository.all();
   }
 
-  public Post getById(long id) {
-    return repository.getById(id).orElseThrow(() ->
-            new NotFoundException(String.format("Запись с id=%d отсутствует", id)));
+  public Optional<Post> getById(long id) {
+    return Optional.ofNullable(repository.getById(id));
   }
 
   public Post save(Post post) {
