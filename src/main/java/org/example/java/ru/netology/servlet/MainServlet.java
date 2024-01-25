@@ -1,9 +1,8 @@
 package org.example.java.ru.netology.servlet;
 
 import org.example.java.ru.netology.controller.PostController;
-import org.example.java.ru.netology.repository.PostRepository;
-import org.example.java.ru.netology.service.PostService;
 import org.example.java.ru.netology.handler.Handler;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,15 +23,6 @@ public class MainServlet extends HttpServlet {
 
     @Override
     public void init() {
-<<<<<<< Updated upstream
-        final var repository = new PostRepository();
-        final var service = new PostService(repository);
-        controller = new PostController(service);
-        addHandler(GET,API_PATH,((path, req, resp) -> controller.all(resp)));
-        addHandler(GET,API_PATH,((path, req, resp) -> {
-            final var id = Long.parseLong(path.substring(path.lastIndexOf("/") +1));
-            controller.getById(id,resp);
-=======
         final var context = new AnnotationConfigApplicationContext("org.example");
         controller = context.getBean(PostController.class);
 
@@ -40,7 +30,6 @@ public class MainServlet extends HttpServlet {
         addHandler(GET, API_PATH, ((path, req, resp) -> {
             final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
             controller.getById(id, resp);
->>>>>>> Stashed changes
         }));
         addHandler(POST, API_PATH, ((path, req, resp) -> controller.save(req.getReader(), resp)));
         addHandler(DELETE, API_PATH, ((path, req, resp) -> {
