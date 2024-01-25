@@ -4,6 +4,7 @@ import org.example.java.ru.netology.controller.PostController;
 import org.example.java.ru.netology.repository.PostRepository;
 import org.example.java.ru.netology.service.PostService;
 import org.example.java.ru.netology.handler.Handler;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,9 +25,8 @@ public class MainServlet extends HttpServlet {
 
     @Override
     public void init() {
-        final var repository = new PostRepository();
-        final var service = new PostService(repository);
-        controller = new PostController(service);
+        final var context = new AnnotationConfigApplicationContext("org.example");
+        final var controller = context.getBean(PostController.class);
 
         addHandler(GET,API_PATH,((path, req, resp) -> controller.all(resp)));
         addHandler(GET,API_PATH,((path, req, resp) -> {
