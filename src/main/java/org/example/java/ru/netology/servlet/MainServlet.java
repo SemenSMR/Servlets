@@ -27,6 +27,7 @@ public class MainServlet extends HttpServlet {
         final var repository = new PostRepository();
         final var service = new PostService(repository);
         controller = new PostController(service);
+
         addHandler(GET,API_PATH,((path, req, resp) -> controller.all(resp)));
         addHandler(GET,API_PATH,((path, req, resp) -> {
             final var id = Long.parseLong(path.substring(path.lastIndexOf("/") +1));
