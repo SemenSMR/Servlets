@@ -24,6 +24,7 @@ public class MainServlet extends HttpServlet {
 
     @Override
     public void init() {
+<<<<<<< Updated upstream
         final var repository = new PostRepository();
         final var service = new PostService(repository);
         controller = new PostController(service);
@@ -31,11 +32,20 @@ public class MainServlet extends HttpServlet {
         addHandler(GET,API_PATH,((path, req, resp) -> {
             final var id = Long.parseLong(path.substring(path.lastIndexOf("/") +1));
             controller.getById(id,resp);
+=======
+        final var context = new AnnotationConfigApplicationContext("org.example");
+        controller = context.getBean(PostController.class);
+
+        addHandler(GET, API_PATH, ((path, req, resp) -> controller.all(resp)));
+        addHandler(GET, API_PATH, ((path, req, resp) -> {
+            final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
+            controller.getById(id, resp);
+>>>>>>> Stashed changes
         }));
-        addHandler(POST,API_PATH,((path, req, resp) -> controller.save(req.getReader(),resp)));
-        addHandler(DELETE,API_PATH,((path, req, resp) -> {
-            Long id = Long.parseLong(path.substring(path.lastIndexOf("/")+ 1));
-            controller.removeById(id,resp);
+        addHandler(POST, API_PATH, ((path, req, resp) -> controller.save(req.getReader(), resp)));
+        addHandler(DELETE, API_PATH, ((path, req, resp) -> {
+            Long id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
+            controller.removeById(id, resp);
         }));
     }
 
@@ -45,8 +55,8 @@ public class MainServlet extends HttpServlet {
         try {
             final var path = req.getRequestURI();
             final var method = req.getMethod();
-           Handler handler;
-            if (path.startsWith(API_PATH) && path.matches(API_PATH+ "/\\d+")) {
+            Handler handler;
+            if (path.startsWith(API_PATH) && path.matches(API_PATH + "/\\d+")) {
                 handler = handlers.get(method).get(API_PATH);
             } else {
                 handler = handlers.get(method).get(path);
