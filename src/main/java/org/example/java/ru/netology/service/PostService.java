@@ -3,10 +3,12 @@ package org.example.java.ru.netology.service;
 import org.example.java.ru.netology.exception.NotFoundException;
 import org.example.java.ru.netology.model.Post;
 import org.example.java.ru.netology.repository.PostRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class PostService {
   private final PostRepository repository;
 
